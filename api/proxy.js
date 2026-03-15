@@ -1,75 +1,68 @@
-export const config = { runtime: 'edge' };
+const https = require('https');
+const http = require('http');
 
-const TARGET = 'https://navvi-microsoft-case-study-product.vercel.app';
+const TARGET_HOST = 'navvi-microsoft-case-study-product.vercel.app';
+const TARGET_ORIGIN = `https://${TARGET_HOST}`;
 
-export default async function handler(req) {
-  const url = new URL(req.url);
-
-  // Strip /proxy prefix → get the real path the app needs
-  // /proxy       → /
-  // /proxy/      → /
-  // /proxy/about → /about
-  const stripped = url.pathname.replace(/^\/proxy\/?/, '') || '';
+module.exports = async (req, res) => {
+  // Strip /proxy prefix to get real path
+  const stripped = req.url.replace(/^\/proxy\/?/, '') || '';
   const targetPath = stripped ? `/${stripped}` : '/';
-  const targetUrl = `${TARGET}${targetPath}${url.search}`;
 
-  try {
-    const response = await fetch(targetUrl, {
-      method: req.method,
-      headers: {
-        // Forward useful headers but spoof the host
-        'accept': req.headers.get('accept') || '*/*',
-        'accept-language': req.headers.get('accept-language') || 'en-US,en',
-        'user-agent': req.headers.get('user-agent') || 'Mozilla/5.0',
-        'referer': TARGET,
-      },
-      body: req.method !== 'GET' && req.method !== 'HEAD' ? req.body : undefined,
+  const options = {
+    hostname: TARGET_HOST,
+    path: targetPath,
+    method: req.method,
+    headers: {
+      'accept': req.headers['accept'] || '*/*',
+      'accept-language': req.headers['accept-language'] || 'en-US,en',
+      'user-agent': req.headers['user-agent'] || 'Mozilla/5.0',
+      'host': TARGET_HOST,
+    },
+  };
+
+  return new Promise((resolve) => {
+    const proxyReq = https.request(options, (proxyRes) => {
+      // Copy headers but strip iframe-blocking ones
+      const headers = { ...proxyRes.headers };
+      delete headers['x-frame-options'];
+      delete headers['content-security-policy'];
+      delete headers['content-security-policy-report-only'];
+      headers['x-frame-options'] = 'ALLOWALL';
+      headers['content-security-policy'] = "frame-ancestors *";
+
+      const contentType = headers['content-type'] || '';
+
+      if (contentType.includes('text/html')) {
+        let body = '';
+        proxyRes.setEncoding('utf8');
+        proxyRes.on('data', chunk => { body += chunk; });
+        proxyRes.on('end', () => {
+          // Rewrite root-relative paths to go through /proxy
+          body = body
+            .replace(/((?:src|href|action)=["'])\/(?!\/|proxy\/|proxy")/g, '$1/proxy/')
+            .replace(/url\(['"]?\/(?!\/|proxy\/)([^'")\s]*)/g, "url('/proxy/$1")
+            .replace(/<base[^>]*>/gi, '')
+            .replace(/<head([^>]*)>/i, '<head$1><base href="/proxy/">');
+
+          res.writeHead(proxyRes.statusCode, headers);
+          res.end(body);
+          resolve();
+        });
+      } else {
+        // Stream non-HTML responses (JS, CSS, images) directly
+        res.writeHead(proxyRes.statusCode, headers);
+        proxyRes.pipe(res);
+        proxyRes.on('end', resolve);
+      }
     });
 
-    const headers = new Headers(response.headers);
-
-    // Strip ALL headers that block iframe embedding
-    headers.delete('x-frame-options');
-    headers.delete('content-security-policy');
-    headers.delete('content-security-policy-report-only');
-
-    // Allow embedding from anywhere
-    headers.set('x-frame-options', 'ALLOWALL');
-    headers.set('content-security-policy', "frame-ancestors *");
-
-    const contentType = headers.get('content-type') || '';
-
-    if (contentType.includes('text/html')) {
-      let body = await response.text();
-
-      // Rewrite all root-relative paths to go through /proxy
-      // so that navigation inside the app stays within the iframe
-      body = body
-        // src="/..." and href="/..." → src="/proxy/..." href="/proxy/..."
-        .replace(/((?:src|href|action)=["'])\/(?!\/|proxy\/|proxy")/g, '$1/proxy/')
-        // url('/...') in CSS
-        .replace(/url\(['"]?\/(?!\/|proxy\/)([^'")\s]*)/g, "url('/proxy/$1")
-        // <base href="..."> — override any base tag
-        .replace(/<base[^>]*>/gi, `<base href="/proxy/">`)
-        // inject a base tag if none exists
-        .replace(/<head([^>]*)>/i, `<head$1><base href="/proxy/">`);
-
-      return new Response(body, {
-        status: response.status,
-        headers,
-      });
-    }
-
-    // For non-HTML (JS, CSS, images, fonts etc.) — pass through as-is
-    return new Response(response.body, {
-      status: response.status,
-      headers,
+    proxyReq.on('error', (err) => {
+      res.writeHead(502, { 'content-type': 'text/plain' });
+      res.end(`Proxy error: ${err.message}`);
+      resolve();
     });
 
-  } catch (err) {
-    return new Response(`Proxy error: ${err.message}`, {
-      status: 502,
-      headers: { 'content-type': 'text/plain' },
-    });
-  }
-}
+    proxyReq.end();
+  });
+};
