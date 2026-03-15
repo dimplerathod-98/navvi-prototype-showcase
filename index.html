@@ -15,8 +15,6 @@
       --text: #f0f0f5;
       --muted: rgba(240,240,245,0.4);
       --border: rgba(255,255,255,0.07);
-
-      /* iPhone 15 Pro dimensions */
       --pw: 393px;
       --ph: 852px;
       --pr: 52px;
@@ -31,7 +29,6 @@
       overflow: hidden;
     }
 
-    /* Ambient glow */
     .bg-glow {
       position: fixed; inset: 0; pointer-events: none; z-index: 0;
       background:
@@ -47,25 +44,16 @@
       background-size: 56px 56px;
     }
 
-    /* Layout */
     .scene {
       position: relative; z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 56px;
-      width: 100vw;
-      height: 100vh;
-      padding: 24px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 56px; width: 100vw; height: 100vh; padding: 24px;
     }
 
-    /* ── Left panel ── */
+    /* Left panel */
     .left {
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-      width: 240px;
-      flex-shrink: 0;
+      display: flex; flex-direction: column;
+      gap: 22px; width: 240px; flex-shrink: 0;
       animation: up 0.7s ease both;
     }
 
@@ -73,17 +61,15 @@
       display: inline-flex; align-items: center; gap: 7px;
       background: rgba(91,143,255,0.1);
       border: 1px solid rgba(91,143,255,0.22);
-      border-radius: 100px;
-      padding: 5px 13px;
+      border-radius: 100px; padding: 5px 13px;
       font-size: 10.5px; font-weight: 500;
       letter-spacing: 0.09em; text-transform: uppercase;
       color: var(--accent); width: fit-content;
     }
 
     .badge-dot {
-      width: 6px; height: 6px;
-      background: var(--accent); border-radius: 50%;
-      box-shadow: 0 0 7px var(--accent);
+      width: 6px; height: 6px; background: var(--accent);
+      border-radius: 50%; box-shadow: 0 0 7px var(--accent);
       animation: pulse 2s ease infinite;
     }
 
@@ -110,14 +96,10 @@
 
     .tags { display: flex; flex-direction: column; gap: 9px; }
 
-    .tag {
-      display: flex; align-items: center; gap: 9px;
-      font-size: 11.5px; color: var(--muted);
-    }
-
+    .tag { display: flex; align-items: center; gap: 9px; font-size: 11.5px; color: var(--muted); }
     .tag-dot { width: 3px; height: 3px; background: var(--accent2); border-radius: 50%; flex-shrink: 0; }
 
-    /* ── Phone ── */
+    /* Phone */
     .phone-wrap {
       position: relative; flex-shrink: 0;
       animation: up 0.7s 0.12s ease both;
@@ -126,11 +108,9 @@
         drop-shadow(0 0 48px rgba(91,143,255,0.07));
     }
 
-    /* Outer shell */
     .phone {
       position: relative;
-      width: var(--pw);
-      height: var(--ph);
+      width: var(--pw); height: var(--ph);
       background: #1c1c1e;
       border-radius: var(--pr);
       border: var(--pb) solid #2c2c2e;
@@ -140,7 +120,6 @@
         0 0 0 1px rgba(0,0,0,0.5);
     }
 
-    /* Volume buttons */
     .phone::before {
       content: '';
       position: absolute; left: -14px; top: 112px;
@@ -149,7 +128,6 @@
       box-shadow: 0 46px 0 #3a3a3c, 0 90px 0 #3a3a3c;
     }
 
-    /* Power button */
     .phone::after {
       content: '';
       position: absolute; right: -14px; top: 172px;
@@ -157,60 +135,45 @@
       background: #3a3a3c; border-radius: 0 2px 2px 0;
     }
 
-    /* Inner screen */
     .screen {
-      position: relative;
-      width: 100%; height: 100%;
+      position: relative; width: 100%; height: 100%;
       border-radius: calc(var(--pr) - var(--pb));
-      background: #000;
-      overflow: hidden;
+      background: #000; overflow: hidden;
     }
 
-    /* Dynamic Island */
     .island {
       position: absolute; top: 11px; left: 50%;
       transform: translateX(-50%);
       width: 124px; height: 36px;
-      background: #000; border-radius: 20px;
-      z-index: 20;
+      background: #000; border-radius: 20px; z-index: 20;
       display: flex; align-items: center; justify-content: center; gap: 8px;
     }
 
     .island-cam {
-      width: 11px; height: 11px;
-      background: #0c0c0c; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.04);
+      width: 11px; height: 11px; background: #0c0c0c;
+      border-radius: 50%; border: 1px solid rgba(255,255,255,0.04);
       position: relative;
     }
 
     .island-cam::after {
-      content: '';
-      position: absolute; inset: 0;
-      margin: auto;
-      width: 5px; height: 5px;
-      background: #0f0f0f; border-radius: 50%;
+      content: ''; position: absolute; inset: 0; margin: auto;
+      width: 5px; height: 5px; background: #0f0f0f; border-radius: 50%;
       border: 1px solid rgba(91,143,255,0.25);
     }
 
-    .island-mic {
-      width: 52px; height: 5px;
-      background: #0c0c0c; border-radius: 3px;
-    }
+    .island-mic { width: 52px; height: 5px; background: #0c0c0c; border-radius: 3px; }
 
-    /* Status bar */
     .statusbar {
       position: absolute; top: 0; left: 0; right: 0;
       height: 58px; z-index: 19;
       display: flex; align-items: flex-end; justify-content: space-between;
-      padding: 0 26px 7px;
-      pointer-events: none;
+      padding: 0 26px 7px; pointer-events: none;
       background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 100%);
     }
 
     .sb-time {
       font-family: -apple-system, sans-serif;
-      font-size: 15px; font-weight: 600; color: #fff;
-      letter-spacing: -0.4px;
+      font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.4px;
     }
 
     .sb-icons { display: flex; align-items: center; gap: 5px; }
@@ -222,77 +185,20 @@
     .bars span:nth-child(3) { height: 8px; }
     .bars span:nth-child(4) { height: 11px; }
 
-    /* ── iframe container — the key fix ── */
-    /*
-      The iframe needs to render as if it's on a real 390px iPhone.
-      We set it to exactly 390×844, then scale it UP slightly to fill
-      the 369×828 inner screen area (393px shell minus 2×12px border).
-      
-      Inner screen size: 369 × 828px
-      Scale factor: 369/390 = 0.9461...
-      
-      We then use a wrapper that clips to screen bounds.
-    */
+    /* App iframe — proxied URL, no cross-origin block */
     .app-clip {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      overflow: hidden;
-      border-radius: inherit;
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden; border-radius: inherit;
     }
 
     .app-iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 390px;
-      height: 844px;
+      position: absolute; top: 0; left: 0;
+      width: 390px; height: 844px;
       border: none;
       transform-origin: top left;
       transform: scale(0.9462);
-      /* 369/390 ≈ 0.9462 — maps 390px app width to 369px inner screen */
     }
 
-    /* Fallback */
-    .fallback {
-      display: none;
-      position: absolute; inset: 0;
-      flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 16px;
-      background: #0d0d12;
-      padding: 36px 28px;
-      text-align: center;
-      border-radius: inherit;
-    }
-
-    .fallback-icon { font-size: 38px; }
-
-    .fallback h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 17px; font-weight: 700; color: var(--text);
-    }
-
-    .fallback p { font-size: 12px; color: var(--muted); line-height: 1.65; }
-
-    .fallback a {
-      margin-top: 4px;
-      padding: 11px 24px;
-      background: rgba(91,143,255,0.14);
-      border: 1px solid rgba(91,143,255,0.38);
-      border-radius: 12px;
-      color: var(--accent); font-size: 13px;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-
-    .fallback a:hover { background: rgba(91,143,255,0.24); }
-
-    .fallback code {
-      font-size: 10px; color: rgba(91,143,255,0.6);
-      background: rgba(91,143,255,0.07);
-      padding: 2px 6px; border-radius: 4px;
-    }
-
-    /* Gloss + home bar */
     .gloss {
       position: absolute; top: 0; left: 0; right: 0; height: 48%;
       background: linear-gradient(155deg, rgba(255,255,255,0.028) 0%, transparent 55%);
@@ -303,11 +209,10 @@
       position: absolute; bottom: 7px; left: 50%;
       transform: translateX(-50%);
       width: 130px; height: 4px;
-      background: rgba(255,255,255,0.2); border-radius: 2px;
-      z-index: 22;
+      background: rgba(255,255,255,0.2); border-radius: 2px; z-index: 22;
     }
 
-    /* ── Right panel ── */
+    /* Right panel */
     .right {
       display: flex; flex-direction: column;
       gap: 12px; width: 190px; flex-shrink: 0;
@@ -324,8 +229,7 @@
       display: flex; align-items: center; gap: 10px;
       padding: 10px 13px;
       background: rgba(255,255,255,0.028);
-      border: 1px solid var(--border);
-      border-radius: 11px;
+      border: 1px solid var(--border); border-radius: 11px;
       color: var(--muted); font-size: 12px;
       font-family: 'Inter', sans-serif;
       cursor: pointer; text-decoration: none;
@@ -334,22 +238,19 @@
 
     .btn:hover {
       background: rgba(91,143,255,0.08);
-      border-color: rgba(91,143,255,0.28);
-      color: var(--text);
+      border-color: rgba(91,143,255,0.28); color: var(--text);
     }
 
     .btn.primary {
       background: rgba(91,143,255,0.11);
-      border-color: rgba(91,143,255,0.32);
-      color: var(--accent);
+      border-color: rgba(91,143,255,0.32); color: var(--accent);
     }
 
     .btn.primary:hover { background: rgba(91,143,255,0.2); }
 
     .btn-ico {
       width: 27px; height: 27px;
-      background: rgba(91,143,255,0.09);
-      border-radius: 7px;
+      background: rgba(91,143,255,0.09); border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
       font-size: 13px; flex-shrink: 0;
     }
@@ -359,23 +260,14 @@
       to   { opacity:1; transform:translateY(0); }
     }
 
-    /* Responsive scaling for smaller screens */
     @media (max-width: 1080px) {
       .left, .right { display: none; }
       .scene { gap: 0; }
     }
 
-    @media (max-height: 920px) {
-      .phone-wrap { transform: scale(0.88); }
-    }
-
-    @media (max-height: 820px) {
-      .phone-wrap { transform: scale(0.76); }
-    }
-
-    @media (max-height: 700px) {
-      .phone-wrap { transform: scale(0.64); }
-    }
+    @media (max-height: 920px) { .phone-wrap { transform: scale(0.88); } }
+    @media (max-height: 820px) { .phone-wrap { transform: scale(0.76); } }
+    @media (max-height: 700px) { .phone-wrap { transform: scale(0.64); } }
   </style>
 </head>
 <body>
@@ -385,7 +277,6 @@
 
 <div class="scene">
 
-  <!-- Left -->
   <div class="left">
     <div class="badge"><div class="badge-dot"></div>Live Prototype</div>
     <h1>Navvi<br/><span>for Microsoft</span></h1>
@@ -398,7 +289,6 @@
     </div>
   </div>
 
-  <!-- Phone -->
   <div class="phone-wrap">
     <div class="phone">
       <div class="screen">
@@ -424,20 +314,13 @@
         </div>
 
         <div class="app-clip">
+          <!-- Points to /proxy which goes through the edge function -->
           <iframe
             id="appFrame"
             class="app-iframe"
-            src="https://navvi-microsoft-case-study-product.vercel.app/"
+            src="/proxy"
             title="Navvi Prototype"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
           ></iframe>
-
-          <div class="fallback" id="fallback">
-            <div class="fallback-icon">📱</div>
-            <h3>Open prototype directly</h3>
-            <p>Browser security is blocking the embed.<br/>Add <code>X-Frame-Options: ALLOWALL</code><br/>to your Navvi app's vercel.json.</p>
-            <a href="https://navvi-microsoft-case-study-product.vercel.app/" target="_blank">Open Navvi →</a>
-          </div>
         </div>
 
         <div class="gloss"></div>
@@ -447,7 +330,6 @@
     </div>
   </div>
 
-  <!-- Right -->
   <div class="right">
     <div class="panel-label">Actions</div>
     <a class="btn primary"
@@ -469,7 +351,6 @@
 </div>
 
 <script>
-  // Live clock
   function tick() {
     const n = new Date();
     document.getElementById('clock').textContent =
@@ -477,35 +358,8 @@
   }
   tick(); setInterval(tick, 10000);
 
-  // Iframe fallback detection
-  const frame = document.getElementById('appFrame');
-  const fallback = document.getElementById('fallback');
-  let didLoad = false;
-
-  frame.addEventListener('load', () => { didLoad = true; });
-
-  setTimeout(() => {
-    if (!didLoad) {
-      frame.style.display = 'none';
-      fallback.style.display = 'flex';
-      return;
-    }
-    try {
-      frame.contentDocument; // cross-origin throws → app loaded fine
-    } catch(e) {
-      return; // good — app is showing
-    }
-    if (!frame.contentDocument?.body?.innerHTML?.trim()) {
-      frame.style.display = 'none';
-      fallback.style.display = 'flex';
-    }
-  }, 5000);
-
-  // Copy
   function copyLink() {
-    navigator.clipboard.writeText(
-      'https://navvi-microsoft-case-study-product.vercel.app/'
-    ).then(() => {
+    navigator.clipboard.writeText('https://navvi-prototype.vercel.app/').then(() => {
       const el = document.getElementById('copy-label');
       el.textContent = 'Copied!';
       setTimeout(() => el.textContent = 'Copy Link', 2000);
